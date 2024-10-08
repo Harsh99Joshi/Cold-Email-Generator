@@ -1,0 +1,87 @@
+{
+    "PersonalInfo": {
+      "Name": "Harshwardhan Joshi",
+      "Location": "Phoenix, AZ",
+      "Email": "harsh10joshii@gmail.com",
+      "Phone": "9848103185"
+    },
+    "Education": [
+      {
+        "Institution": "North Carolina State University",
+        "Degree": "Master of Science - Computer Science",
+        "Location": "Raleigh, NC, USA",
+        "Dates": "August 2022 - May 2024"
+      },
+      {
+        "Institution": "Kalinga Institute of Industrial Technology",
+        "Degree": "Bachelor of Technology - Computer Science",
+        "Location": "Bhubaneswar, India",
+        "Dates": "June 2018 - May 2022"
+      }
+    ],
+    "ProfessionalExperience": [
+      {
+        "Role": "Research Assistant - Natural Language Processing",
+        "Company": "North Carolina State University",
+        "Location": "Raleigh, NC, USA",
+        "Dates": "April 2024 - Present",
+        "Responsibilities": [
+          "Analyzed over 5,000 university syllabi using bioBERT, RoBERTa, and GPT, alongside Word2Vec and TF-IDF for text processing.",
+          "Conducted cluster analysis on 10,000+ data points, revealing significant patterns in educational datasets.",
+          "Identified 150+ critical biochemistry-related terms using attention scores and expanded keyword coverage by 200% using similarity analysis with Word2Vec."
+        ]
+      },
+      {
+        "Role": "Machine Learning Intern",
+        "Company": "Verzeo",
+        "Location": "Bhubaneswar, India",
+        "Dates": "June 2020 - August 2020",
+        "Responsibilities": [
+          "Led a team to develop a regression model for predicting used car prices, performing extensive EDA and data cleaning.",
+          "Implemented and compared various regression algorithms, achieving 92% accuracy with XGBoost Regressor.",
+          "Communicated complex insights to non-technical stakeholders using Tableau and projected a revenue increase of INR 5,00,000 per month."
+        ]
+      }
+    ],
+    "TechnicalSkills": {
+      "ProgrammingLanguages": ["Python", "R", "SQL (MySQL, Querying)", "Java"],
+      "MachineLearning": ["Regression", "Classification", "Clustering", "NLP", "Feature Engineering"],
+      "Libraries": ["TensorFlow", "PyTorch", "Keras", "MLlib", "MLFlow", "OpenCV"],
+      "StatisticalAnalysis": ["A/B Testing", "Experimental Design", "Hypothesis Testing"],
+      "DataVisualization": ["Tableau", "Power BI", "Microsoft Excel"],
+      "BigDataAndCloudTools": ["Apache Spark", "AWS (SageMaker, S3, EC2, Lambda, RDS)"]
+    },
+    "AcademicProjects": [
+      {
+        "Name": "Cold Email Generator",
+        "Description": "Developed an innovative Cold Email Generator for automating personalized outreach to hiring managers.",
+        "TechStack": ["Llama 3.1", "LLM", "LangChain", "ChromaDB", "GROQ", "Streamlit"],
+        "Achievements": "Leveraged the Llama 3.1 language model via GROQ to generate highly tailored cold emails, resulting in a 40% increase in response rates compared to generic templates"
+      },
+      {
+        "Name": "Multivariate Time Series Forecasting",
+        "Description": "Implemented deep learning models (LSTM, GRU, CNN) to predict climate variables from a large-scale time series dataset.",
+        "TechStack": ["Python", "LSTM", "GRU", "CNN", "TensorFlow"],
+        "Achievements": "Achieved high prediction accuracy with an RMSE of 1.25°C on temperature predictions."
+      },
+      {
+        "Name": "Book Recommendation System",
+        "Description": "Built a collaborative filtering system using the ALS algorithm, analyzing a large dataset of 1 million+ entries.",
+        "TechStack": ["Apache Spark", "MLlib", "PySpark", "SQL"],
+        "Achievements": "Achieved an RMSE of 0.82 on the validation set through hyperparameter tuning with cross-validation."
+      },
+      {
+        "Name": "Mobile Price Classification on AWS",
+        "Description": "Deployed a machine learning model as an API endpoint on AWS SageMaker, achieving real-time prediction capabilities with 99.9% uptime.",
+        "TechStack": ["AWS SageMaker", "S3", "EC2", "RDS", "Scikit-learn"],
+        "Achievements": "Obtained a cross-validation accuracy of 95% in classification across multiple test scenarios."
+      },
+      {
+        "Name": "Vehicle Servicing API",
+        "Description": "Developed a Java-based vehicle servicing database with MSSQL, reducing data entry errors by 35%.",
+        "TechStack": ["Java", "SQL", "MSSQL", "JDBC"],
+        "Achievements": "Formulated sophisticated SQL queries to integrate and consolidate vehicle, customer, and mechanic records."
+      }
+    ]
+  }
+  
