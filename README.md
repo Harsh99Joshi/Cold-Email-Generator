@@ -17,7 +17,7 @@ Frontend: Streamlit
 Version Control: GitHub
 
 # How to run
-Navigate to the main.py file, and write in the command "streamlit run main.py" to open the Streamlit UI.
+Open any IDE and navigate to the app folder. Type in the command "streamlit run main.py" in the IDE terminal to launch the Streamlit UI.
 
 # Screenshot
 <img width="1225" alt="image" src="https://github.com/user-attachments/assets/6a35decc-dbda-434e-a37e-e112ecc88db4">
