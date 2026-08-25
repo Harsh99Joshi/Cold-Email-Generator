@@ -1,61 +1,98 @@
-import pandas as pd
 import json
-import chromadb
 import uuid
+
+import chromadb
+
+from config import COLLECTION_NAME, RESUME_PATH, VECTORSTORE_DIR
 
 
 class Portfolio:
-    def __init__(self, file_path="resource/resume.json"):
-        self.file_path = file_path
+    def __init__(self, file_path=None):
+        self.file_path = str(file_path or RESUME_PATH)
         self.data = self.load_json_data()
-        self.chroma_client = chromadb.PersistentClient('vectorstore')
-        self.collection = self.chroma_client.get_or_create_collection(name="portfolio")
+        VECTORSTORE_DIR.mkdir(parents=True, exist_ok=True)
+        self.chroma_client = chromadb.PersistentClient(path=str(VECTORSTORE_DIR))
+        self.collection = self.chroma_client.get_or_create_collection(name=COLLECTION_NAME)
 
     def load_json_data(self):
-        # Load the resume JSON file
-        with open(self.file_path, "r") as file:
-            data = json.load(file)
-        return data
+        with open(self.file_path, "r", encoding="utf-8") as file:
+            return json.load(file)
 
-    def load_portfolio(self):
-        if not self.collection.count():
-            # Add technical skills and projects to the collection
-            for skill in self.data['TechnicalSkills']:
-                self.collection.add(
-                    documents=str(skill),
-                    metadatas={"links": "Resume Link"},  # Add link to resume if needed
-                    ids=[str(uuid.uuid4())]
-                )
-            for project in self.data['AcademicProjects']:
-                self.collection.add(
-                    documents=project['Description'],
-                    metadatas={"links": project['Name']},
-                    ids=[str(uuid.uuid4())]
-                )
+    @staticmethod
+    def project_document(project):
+        tech = ", ".join(project.get("TechStack") or [])
+        return (
+            f"Project: {project.get('Name', '')}\n"
+            f"Tech stack: {tech}\n"
+            f"Description: {project.get('Description', '')}\n"
+            f"Achievements: {project.get('Achievements', '')}"
+        )
+
+    def documents_by_name(self):
+        return {
+            project["Name"]: self.project_document(project)
+            for project in self.data.get("AcademicProjects", [])
+        }
+
+    def load_portfolio(self, rebuild=False):
+        if rebuild and self.collection.count():
+            self.chroma_client.delete_collection(COLLECTION_NAME)
+            self.collection = self.chroma_client.get_or_create_collection(name=COLLECTION_NAME)
+
+        if self.collection.count():
+            return
+
+        ids, documents, metadatas = [], [], []
+        for project in self.data.get("AcademicProjects", []):
+            ids.append(str(uuid.uuid4()))
+            documents.append(self.project_document(project))
+            metadatas.append({"name": project["Name"]})
+
+        if documents:
+            self.collection.add(ids=ids, documents=documents, metadatas=metadatas)
+
+    def query_projects(self, skills, n_results=3, description=""):
+        if isinstance(skills, str):
+            query = skills
+        else:
+            query = ", ".join(str(skill) for skill in (skills or []) if skill)
+
+        if description:
+            query = f"{query}\n{description}".strip()
+
+        if not query:
+            return []
+
+        available = self.collection.count()
+        if not available:
+            return []
+
+        results = self.collection.query(
+            query_texts=[query],
+            n_results=min(n_results, available),
+            include=["documents", "metadatas", "distances"],
+        )
+        documents = (results.get("documents") or [[]])[0]
+        metadatas = (results.get("metadatas") or [[]])[0]
+        distances = (results.get("distances") or [[]])[0]
+
+        projects = []
+        for document, metadata, distance in zip(documents, metadatas, distances):
+            metadata = metadata or {}
+            projects.append(
+                {
+                    "name": metadata.get("name", ""),
+                    "document": document,
+                    "distance": distance,
+                }
+            )
+        return projects
 
     def query_links(self, skills):
-        # Query relevant projects or skills based on the job description's skills
-        results = self.collection.query(query_texts=skills, n_results=1)
-        
-        # Get the 'metadatas' list from the query result
-        metadata_list = results.get('metadatas', [])
-        
-        # Ensure we're iterating over the list correctly and accessing elements
-        links = []
-        for metadata in metadata_list:
-            if isinstance(metadata, list):  # Handle if 'metadatas' is a list of lists
-                for entry in metadata:
-                    if 'links' in entry:
-                        links.append(entry['links'])
-            elif 'links' in metadata:  # If it's a flat list of dictionaries
-                links.append(metadata['links'])
+        return ", ".join(project["name"] for project in self.query_projects(skills) if project["name"])
 
-        # Convert the links into a comma-separated string
-        return ', '.join(links)
-    
     def clear_collection(self):
-        """
-        Clears all documents from the ChromaDB collection.
-        """
-        self.collection.delete()  # Deletes all documents in the collection
+        if self.collection.count():
+            self.chroma_client.delete_collection(COLLECTION_NAME)
+            self.collection = self.chroma_client.get_or_create_collection(name=COLLECTION_NAME)
         print("ChromaDB collection cleared.")

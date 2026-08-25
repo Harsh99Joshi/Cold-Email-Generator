@@ -88,26 +88,29 @@ A **Streamlit** frontend allows users to provide job posting URLs and review the
 
 ## Running Locally
 
-Clone the repository:
+Create a virtual environment from the repo root and install dependencies:
 
-```bash
-git clone https://github.com/Harsh99Joshi/Cold-Email-Generator.git
-cd Cold-Email-Generator
-```
-
-Install the required dependencies:
-
-```bash
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-Configure your Groq API key using the environment configuration expected by the application.
+Copy `.env.example` to `.env` and set `GROQ_API_KEY` from [Groq Console](https://console.groq.com/keys). Groq retired `llama-3.1-70b-versatile`; the default model is `openai/gpt-oss-120b`.
 
-Launch the application:
+Launch the Streamlit app:
 
-```bash
-streamlit run main.py
+```powershell
+.\.venv\Scripts\streamlit.exe run "Cold Email Generator/app/main.py"
 ```
+
+Evaluate how relevant retrieved projects are with RAGAS (Hit@k plus context precision / recall):
+
+```powershell
+.\.venv\Scripts\python.exe "Cold Email Generator/app/evaluate_retrieval.py"
+```
+
+Non-LLM RAGAS metrics run without an API key. LLM-as-judge context precision and recall need `GROQ_API_KEY`. Results are written to `Cold Email Generator/app/eval_results.csv`.
 
 ## Example Workflow
 

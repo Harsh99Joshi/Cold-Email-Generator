@@ -1,0 +1,8 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+.chroma/
+chroma_db/
+eval_results.csv
+.streamlit/
